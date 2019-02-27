@@ -9,6 +9,9 @@ A Collection of tutorials for the Clojure MXNET package
 ```
 docker run \
        --rm \
+       --env="DISPLAY" \
+       --env="QT_X11_NO_MITSHM=1" \
+       --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
        --volume "$PWD:/home/mxnetuser/app" \
        --volume "$HOME/.m2:/home/mxnetuser/.m2" \
        --volume "$HOME/.m2:/root/.m2" \
