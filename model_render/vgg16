@@ -1,0 +1,108 @@
+digraph vgg16{
+	data [label=data  fixedsize=false style=filled height=0.8034 fillcolor="#8dd3c7" shape=oval width=1.3]
+	conv1_1 [label="Convolution\n3x3/1x1, 64"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	relu1_1 [label="Activation
+relu"  fixedsize=false style=filled height=0.8034 fillcolor="#ffffb3" shape=oval width=1.3]
+	conv1_2 [label="Convolution\n3x3/1x1, 64"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	relu1_2 [label="Activation
+relu"  fixedsize=false style=filled height=0.8034 fillcolor="#ffffb3" shape=oval width=1.3]
+	pool1 [label="Pooling
+max, 2x2/2x2"  fixedsize=false style=filled height=0.8034 fillcolor="#80b1d3" shape=oval width=1.3]
+	conv2_1 [label="Convolution\n3x3/1x1, 128"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	relu2_1 [label="Activation
+relu"  fixedsize=false style=filled height=0.8034 fillcolor="#ffffb3" shape=oval width=1.3]
+	conv2_2 [label="Convolution\n3x3/1x1, 128"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	relu2_2 [label="Activation
+relu"  fixedsize=false style=filled height=0.8034 fillcolor="#ffffb3" shape=oval width=1.3]
+	pool2 [label="Pooling
+max, 2x2/2x2"  fixedsize=false style=filled height=0.8034 fillcolor="#80b1d3" shape=oval width=1.3]
+	conv3_1 [label="Convolution\n3x3/1x1, 256"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	relu3_1 [label="Activation
+relu"  fixedsize=false style=filled height=0.8034 fillcolor="#ffffb3" shape=oval width=1.3]
+	conv3_2 [label="Convolution\n3x3/1x1, 256"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	relu3_2 [label="Activation
+relu"  fixedsize=false style=filled height=0.8034 fillcolor="#ffffb3" shape=oval width=1.3]
+	conv3_3 [label="Convolution\n3x3/1x1, 256"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	relu3_3 [label="Activation
+relu"  fixedsize=false style=filled height=0.8034 fillcolor="#ffffb3" shape=oval width=1.3]
+	pool3 [label="Pooling
+max, 2x2/2x2"  fixedsize=false style=filled height=0.8034 fillcolor="#80b1d3" shape=oval width=1.3]
+	conv4_1 [label="Convolution\n3x3/1x1, 512"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	relu4_1 [label="Activation
+relu"  fixedsize=false style=filled height=0.8034 fillcolor="#ffffb3" shape=oval width=1.3]
+	conv4_2 [label="Convolution\n3x3/1x1, 512"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	relu4_2 [label="Activation
+relu"  fixedsize=false style=filled height=0.8034 fillcolor="#ffffb3" shape=oval width=1.3]
+	conv4_3 [label="Convolution\n3x3/1x1, 512"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	relu4_3 [label="Activation
+relu"  fixedsize=false style=filled height=0.8034 fillcolor="#ffffb3" shape=oval width=1.3]
+	pool4 [label="Pooling
+max, 2x2/2x2"  fixedsize=false style=filled height=0.8034 fillcolor="#80b1d3" shape=oval width=1.3]
+	conv5_1 [label="Convolution\n3x3/1x1, 512"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	relu5_1 [label="Activation
+relu"  fixedsize=false style=filled height=0.8034 fillcolor="#ffffb3" shape=oval width=1.3]
+	conv5_2 [label="Convolution\n3x3/1x1, 512"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	relu5_2 [label="Activation
+relu"  fixedsize=false style=filled height=0.8034 fillcolor="#ffffb3" shape=oval width=1.3]
+	conv5_3 [label="Convolution\n3x3/1x1, 512"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	relu5_3 [label="Activation
+relu"  fixedsize=false style=filled height=0.8034 fillcolor="#ffffb3" shape=oval width=1.3]
+	pool5 [label="Pooling
+max, 2x2/2x2"  fixedsize=false style=filled height=0.8034 fillcolor="#80b1d3" shape=oval width=1.3]
+	flatten_0 [label=flatten_0  fixedsize=false style=filled height=0.8034 fillcolor="#fdb462" shape=oval width=1.3]
+	fc6 [label="FullyConnected
+4096"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	relu6 [label="Activation
+relu"  fixedsize=false style=filled height=0.8034 fillcolor="#ffffb3" shape=oval width=1.3]
+	drop6 [label=drop6  fixedsize=false style=filled height=0.8034 fillcolor="#fccde5" shape=oval width=1.3]
+	fc7 [label="FullyConnected
+4096"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	relu7 [label="Activation
+relu"  fixedsize=false style=filled height=0.8034 fillcolor="#ffffb3" shape=oval width=1.3]
+	drop7 [label=drop7  fixedsize=false style=filled height=0.8034 fillcolor="#fccde5" shape=oval width=1.3]
+	fc8 [label="FullyConnected
+1000"  fixedsize=false style=filled height=0.8034 fillcolor="#fb8072" shape=oval width=1.3]
+	prob_label [label=prob_label  fixedsize=false style=filled height=0.8034 fillcolor="#8dd3c7" shape=oval width=1.3]
+	prob [label=prob  fixedsize=false style=filled height=0.8034 fillcolor="#fccde5" shape=oval width=1.3]
+		conv1_1 -> data [ arrowtail=open dir=back label="3x244x244"]
+		relu1_1 -> conv1_1 [ arrowtail=open dir=back label="64x244x244"]
+		conv1_2 -> relu1_1 [ arrowtail=open dir=back label="64x244x244"]
+		relu1_2 -> conv1_2 [ arrowtail=open dir=back label="64x244x244"]
+		pool1 -> relu1_2 [ arrowtail=open dir=back label="64x244x244"]
+		conv2_1 -> pool1 [ arrowtail=open dir=back label="64x122x122"]
+		relu2_1 -> conv2_1 [ arrowtail=open dir=back label="128x122x122"]
+		conv2_2 -> relu2_1 [ arrowtail=open dir=back label="128x122x122"]
+		relu2_2 -> conv2_2 [ arrowtail=open dir=back label="128x122x122"]
+		pool2 -> relu2_2 [ arrowtail=open dir=back label="128x122x122"]
+		conv3_1 -> pool2 [ arrowtail=open dir=back label="128x61x61"]
+		relu3_1 -> conv3_1 [ arrowtail=open dir=back label="256x61x61"]
+		conv3_2 -> relu3_1 [ arrowtail=open dir=back label="256x61x61"]
+		relu3_2 -> conv3_2 [ arrowtail=open dir=back label="256x61x61"]
+		conv3_3 -> relu3_2 [ arrowtail=open dir=back label="256x61x61"]
+		relu3_3 -> conv3_3 [ arrowtail=open dir=back label="256x61x61"]
+		pool3 -> relu3_3 [ arrowtail=open dir=back label="256x61x61"]
+		conv4_1 -> pool3 [ arrowtail=open dir=back label="256x31x31"]
+		relu4_1 -> conv4_1 [ arrowtail=open dir=back label="512x31x31"]
+		conv4_2 -> relu4_1 [ arrowtail=open dir=back label="512x31x31"]
+		relu4_2 -> conv4_2 [ arrowtail=open dir=back label="512x31x31"]
+		conv4_3 -> relu4_2 [ arrowtail=open dir=back label="512x31x31"]
+		relu4_3 -> conv4_3 [ arrowtail=open dir=back label="512x31x31"]
+		pool4 -> relu4_3 [ arrowtail=open dir=back label="512x31x31"]
+		conv5_1 -> pool4 [ arrowtail=open dir=back label="512x16x16"]
+		relu5_1 -> conv5_1 [ arrowtail=open dir=back label="512x16x16"]
+		conv5_2 -> relu5_1 [ arrowtail=open dir=back label="512x16x16"]
+		relu5_2 -> conv5_2 [ arrowtail=open dir=back label="512x16x16"]
+		conv5_3 -> relu5_2 [ arrowtail=open dir=back label="512x16x16"]
+		relu5_3 -> conv5_3 [ arrowtail=open dir=back label="512x16x16"]
+		pool5 -> relu5_3 [ arrowtail=open dir=back label="512x16x16"]
+		flatten_0 -> pool5 [ arrowtail=open dir=back label="512x8x8"]
+		fc6 -> flatten_0 [ arrowtail=open dir=back label="32768"]
+		relu6 -> fc6 [ arrowtail=open dir=back label="4096"]
+		drop6 -> relu6 [ arrowtail=open dir=back label="4096"]
+		fc7 -> drop6 [ arrowtail=open dir=back label="4096"]
+		relu7 -> fc7 [ arrowtail=open dir=back label="4096"]
+		drop7 -> relu7 [ arrowtail=open dir=back label="4096"]
+		fc8 -> drop7 [ arrowtail=open dir=back label="4096"]
+		prob -> fc8 [ arrowtail=open dir=back label="1000"]
+		prob -> prob_label [ arrowtail=open dir=back label=""]
+}
