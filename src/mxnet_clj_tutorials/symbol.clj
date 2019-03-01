@@ -1,5 +1,5 @@
 (ns mxnet-clj-tutorials.symbol
-  "Tutorial for the `symbol` API"
+  "Tutorial for the `symbol` API."
   (:require
     [org.apache.clojure-mxnet.context :as context]
     [org.apache.clojure-mxnet.module :as m]
