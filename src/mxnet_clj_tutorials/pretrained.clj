@@ -73,11 +73,12 @@
   ([model labels nda k]
    (let [prob
          ;; The computation graph of the model is ran forward once
-         (-> model (m/forward {:data [nda]}) m/outputs ffirst)
+         (-> model (m/forward {:data [nda]}) m/outputs ffirst ndarray/->vec)
 
          prob-with-labels
-         (mapv (fn [p l] {:prob p :label l}) (ndarray/->vec prob) labels)]
-     (->> (sort-by :prob prob-with-labels)
+         (mapv (fn [p l] {:prob p :label l}) prob labels)]
+     (->> prob-with-labels
+          (sort-by :prob)
           reverse
           (take k)))))
 
@@ -93,7 +94,6 @@
 (predict inception-mod
          image-net-labels
          (preprocess-img-mat (cv/imread "images/cat.jpg")))
-
 ;({:prob 0.5226559, :label "n02119789 kit fox, Vulpes macrotis"}
 ;{:prob 0.14540964, :label "n02112018 Pomeranian"}
 ;{:prob 0.13845555, :label "n02119022 red fox, Vulpes vulpes"}
