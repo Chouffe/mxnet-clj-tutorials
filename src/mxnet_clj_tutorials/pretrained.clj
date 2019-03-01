@@ -25,8 +25,8 @@
 (def w 224)
 (def c 3)
 
-(def inception-mod
-  "Pretrained Inception BN model loaded from disk"
+;; Pretrained Inception BN model loaded from disk
+(defonce inception-mod
   (-> {:prefix (str model-dir "Inception-BN") :epoch 0}
       m/load-checkpoint
       ;; Define the shape of input data and bind the name of the input layer
@@ -34,8 +34,8 @@
       (m/bind {:for-training false
                :data-shapes [{:name "data" :shape [1 c h w]}]})))
 
-(def image-net-labels
-  "ImageNet 1000 Labels"
+;; ImageNet 1000 Labels
+(defonce image-net-labels
   (-> (slurp (str model-dir "/synset.txt"))
       (string/split #"\n")))
 
@@ -82,27 +82,30 @@
           reverse
           (take k)))))
 
-(predict inception-mod
-         image-net-labels
-         (preprocess-img-mat (cv/imread "images/guitarplayer.jpg")))
+(->> "images/guitarplayer.jpg"
+     cv/imread
+     preprocess-img-mat
+     (predict inception-mod image-net-labels))
 ;({:prob 0.68194896, :label "n04296562 stage"}
 ;{:prob 0.06861413, :label "n03272010 electric guitar"}
 ;{:prob 0.04886661, :label "n10565667 scuba diver"}
 ;{:prob 0.044686787, :label "n03250847 drumstick"}
 ;{:prob 0.029348794, :label "n02676566 acoustic guitar"})
 
-(predict inception-mod
-         image-net-labels
-         (preprocess-img-mat (cv/imread "images/cat.jpg")))
+(->> "images/cat.jpg"
+     cv/imread
+     preprocess-img-mat
+     (predict inception-mod image-net-labels))
 ;({:prob 0.5226559, :label "n02119789 kit fox, Vulpes macrotis"}
 ;{:prob 0.14540964, :label "n02112018 Pomeranian"}
 ;{:prob 0.13845555, :label "n02119022 red fox, Vulpes vulpes"}
 ;{:prob 0.06784552, :label "n02120505 grey fox, gray fox, Urocyon cinereoargenteus"}
 ;{:prob 0.024868377, :label "n02441942 weasel"})
 
-(predict inception-mod
-         image-net-labels
-         (preprocess-img-mat (cv/imread "images/dog.jpg")))
+(->> "images/dog.jpg"
+     cv/imread
+     preprocess-img-mat
+     (predict inception-mod image-net-labels))
 ;({:prob 0.89285797, :label "n02110958 pug, pug-dog"}
 ;{:prob 0.06376573, :label "n04409515 tennis ball"}
 ;{:prob 0.01919549, :label "n03942813 ping-pong ball"}
