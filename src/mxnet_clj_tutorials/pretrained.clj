@@ -36,12 +36,13 @@
 
 ;; ImageNet 1000 Labels
 (defonce image-net-labels
-  (-> (slurp (str model-dir "/synset.txt"))
+  (-> (str model-dir "/synset.txt")
+      slurp
       (string/split #"\n")))
 
 (assert (= 1000 (count image-net-labels)))
 
-;; Preparing the Data
+;;; Preparing the Data
 
 (defn preprocess-img-mat
   "Preprocessing steps on an `img-mat` from OpenCV to feed into the Model"

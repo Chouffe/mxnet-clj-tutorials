@@ -3,13 +3,13 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as string]
 
-            [org.apache.clojure-mxnet.visualization :as viz]
             [org.apache.clojure-mxnet.dtype :as d]
+            [org.apache.clojure-mxnet.image :as image]
             [org.apache.clojure-mxnet.module :as m]
             [org.apache.clojure-mxnet.ndarray :as ndarray]
             [org.apache.clojure-mxnet.shape :as mx-shape]
             [org.apache.clojure-mxnet.symbol :as sym]
-            [org.apache.clojure-mxnet.image :as image]
+            [org.apache.clojure-mxnet.visualization :as viz]
 
             [mxnet-clj-tutorials.lenet :as lenet]))
 

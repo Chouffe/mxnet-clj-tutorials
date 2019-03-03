@@ -2,11 +2,12 @@
   "Tutorial for the `symbol` API."
   (:require
     [org.apache.clojure-mxnet.context :as context]
-    [org.apache.clojure-mxnet.module :as m]
     [org.apache.clojure-mxnet.dtype :as d]
     [org.apache.clojure-mxnet.executor :as executor]
+    [org.apache.clojure-mxnet.module :as m]
     [org.apache.clojure-mxnet.ndarray :as ndarray]
-    [org.apache.clojure-mxnet.symbol :as sym]))
+    [org.apache.clojure-mxnet.symbol :as sym]
+    [org.apache.clojure-mxnet.visualization :as viz]))
 
 ;;; Composing Symbols
 
@@ -30,6 +31,25 @@
 
 ;; What is the implementation of `e` as a stack of operations?
 (sym/list-outputs (sym/get-internals e)) ;["A" "B" "_mul0_output" "C" "D" "_mul1_output" "_plus0_output"]
+
+;; Render Computation Graph
+(defn render-computation-graph!
+  "Render the `sym` and saves it as a pdf file in `path/sym-name.pdf`"
+  [{:keys [sym-name sym input-data-shape path]}]
+  (let [dot (viz/plot-network
+              sym
+              input-data-shape
+              {:title sym-name
+               :node-attrs {:shape "oval" :fixedsize "false"}})]
+    (viz/render dot sym-name path)))
+
+(comment
+  ;; Render the computation graph `e`
+  (render-computation-graph!
+    {:sym-name "e"
+     :sym e
+     :input-data-shape {"A" [1] "B" [1] "C" [1] "D" [1]}
+     :path "model_render"}))
 
 ;;; Executing Symbols
 

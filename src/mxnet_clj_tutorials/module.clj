@@ -11,7 +11,8 @@
     [org.apache.clojure-mxnet.optimizer :as optimizer]
     [org.apache.clojure-mxnet.random :as random]
     [org.apache.clojure-mxnet.shape :as mx-shape]
-    [org.apache.clojure-mxnet.symbol :as sym]))
+    [org.apache.clojure-mxnet.symbol :as sym]
+    [org.apache.clojure-mxnet.visualization :as viz]))
 
 ;; Inspiration from: https://mxnet.incubator.apache.org/api/clojure/module.html
 ;; The Module API lets us train/optimize a Neural Network symbol
@@ -84,6 +85,7 @@
     (sym/fully-connected "fc2" {:data data :num-hidden category-count})
     (sym/softmax-output "softmax" {:data data})))
 
+
 ;;; Building the Data Iterator
 
 (def train-iter
@@ -98,6 +100,7 @@
                        :label [Y-valid]
                        :data-batch-size batch-size}))
 
+;; Wrapping the computation graph in a `module`
 (def model-module (m/module (get-symbol)))
 
 ;;; Training the Model

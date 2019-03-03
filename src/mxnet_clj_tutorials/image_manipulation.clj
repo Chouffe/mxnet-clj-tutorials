@@ -1,7 +1,12 @@
 (ns mxnet-clj-tutorials.image-manipulation
-  (:require [clojure.java.io :as io]
-            [opencv4.core :as cv]
-            [opencv4.utils :as cvu]))
+  (:require
+    [clojure.java.io :as io]
+
+    [org.apache.clojure-mxnet.image :as mx-img]
+    [org.apache.clojure-mxnet.ndarray :as ndarray]
+    [opencv4.core :as cv]
+    [opencv4.utils :as cvu])
+  (:import org.opencv.core.Mat java.awt.image.DataBufferByte))
 
 (defn download!
   "Download `uri` and store it in `filename` on disk"
@@ -82,3 +87,46 @@
       cv/imread
       preprocess-mat
       cvu/imshow))
+
+(comment
+  (-> "images/dog.jpg"
+      ;;
+      (mx-img/read-image #_{:to-rgb true}) ;; optiona to-rgb, true by default
+      ;; Resizing image to height = 400, width = 400
+      (mx-img/resize-image 400 400)
+      mx-img/to-image
+      ;; Saving image to disk
+      (javax.imageio.ImageIO/write "jpg" (java.io.File. "test2.jpg")))
+
+  (-> "images/img_517.jpg"
+      (mx-img/read-image {:to-rgb true})
+      mx-img/to-image
+      ; cvu/buffered-image-to-mat
+      ;; Save Image To File
+      (javax.imageio.ImageIO/write "jpg" (java.io.File. "test.jpg"))
+      ; cvu/imshow
+      )
+
+  (def bi
+    (-> "images/dog.jpg"
+        (mx-img/read-image {:to-rgb true})
+        mx-img/to-image
+        ; cvu/buffered-image-to-mat
+        ;; Save Image To File
+        ; (javax.imageio.ImageIO/write "jpg" (java.io.File. "test.jpg"))
+        ; cvu/imshow
+        ))
+
+  ;; Converting a bufferImage to a mat
+  ;; Resource: https://stackoverflow.com/questions/14958643/converting-bufferedimage-to-mat-in-opencv#15095653
+
+  ;; bi->mat function... not working yet
+  (defn bi->mat
+    "Converts a BufferImage `bi` into a Mat"
+    [bi]
+    (let [mat (Mat.(.getHeight bi) (.getWidth bi) cv/CV_8UC3)
+          data-buffer (.getDataBuffer (.getRaster bi))
+          pixel-bytes (.getData (cast DataBufferByte data-buffer))]
+      (.put mat 0 0 pixel-bytes)
+      mat))
+  )
