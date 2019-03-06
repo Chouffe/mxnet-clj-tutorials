@@ -4,8 +4,11 @@
 
     [org.apache.clojure-mxnet.image :as mx-img]
     [org.apache.clojure-mxnet.ndarray :as ndarray]
+    [org.apache.clojure-mxnet.shape :as mx-shape]
+
     [opencv4.core :as cv]
-    [opencv4.utils :as cvu])
+    [opencv4.utils :as cvu]
+    )
   (:import org.opencv.core.Mat java.awt.image.DataBufferByte))
 
 (defn download!
@@ -53,12 +56,15 @@
         cvu/mat->flat-rgb-array
         (ndarray/array [c h w]))))
 
-;; TODO
 (defn ndarray->mat
-  "Converts a `ndarray` to an OpenCV `mat`"
+  "Convert a `ndarray` to an OpenCV `mat`"
   [ndarray]
-  ;; TODO
-  )
+  (let [shape (mx-shape/->vec ndarray)
+        [h w _ _] (mx-shape/->vec (ndarray/shape ndarray))
+        bytes (byte-array shape)
+        mat (cv/new-mat h w cv/CV_8UC3)]
+    (.put mat 0 0 bytes)
+    mat))
 
 (defn filename->ndarray!
   "Convert an image stored on disk `filename` into an `ndarray`
@@ -107,26 +113,16 @@
       ; cvu/imshow
       )
 
-  (def bi
-    (-> "images/dog.jpg"
-        (mx-img/read-image {:to-rgb true})
-        mx-img/to-image
-        ; cvu/buffered-image-to-mat
-        ;; Save Image To File
-        ; (javax.imageio.ImageIO/write "jpg" (java.io.File. "test.jpg"))
-        ; cvu/imshow
-        ))
+  ;; Showing an image using `cvu/buffered-image-to-mat`
+  (-> "images/dog.jpg"
+      (mx-img/read-image {:to-rgb true})
+      mx-img/to-image
+      cvu/buffered-image-to-mat
+      cvu/imshow)
 
-  ;; Converting a bufferImage to a mat
-  ;; Resource: https://stackoverflow.com/questions/14958643/converting-bufferedimage-to-mat-in-opencv#15095653
-
-  ;; bi->mat function... not working yet
-  (defn bi->mat
-    "Converts a BufferImage `bi` into a Mat"
-    [bi]
-    (let [mat (Mat.(.getHeight bi) (.getWidth bi) cv/CV_8UC3)
-          data-buffer (.getDataBuffer (.getRaster bi))
-          pixel-bytes (.getData (cast DataBufferByte data-buffer))]
-      (.put mat 0 0 pixel-bytes)
-      mat))
+  ;; Much Faster using custom `ndarray->mat`
+  (-> "images/dog.jpg"
+      (mx-img/read-image {:to-rgb false})
+      ndarray->mat
+      cvu/imshow)
   )

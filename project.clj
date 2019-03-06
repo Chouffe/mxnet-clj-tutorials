@@ -7,7 +7,7 @@
                  [org.apache.mxnet.contrib.clojure/clojure-mxnet-linux-cpu "1.4.0"]
 
                  ;; OpenCV wrapper
-                 [origami "4.0.0-3"]]
+                 [origami "4.0.0-4"]]
 
   :repositories
   [["vendredi" {:url "https://repository.hellonico.info/repository/hellonico/"}]
