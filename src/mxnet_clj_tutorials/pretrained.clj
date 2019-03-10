@@ -5,6 +5,7 @@
 
     [opencv4.core :as cv]
     [opencv4.utils :as cvu]
+
     [org.apache.clojure-mxnet.dtype :as d]
     [org.apache.clojure-mxnet.eval-metric :as eval-metric]
     [org.apache.clojure-mxnet.executor :as executor]
@@ -67,21 +68,26 @@
 
 ;;; Predicting
 
+(defn- top-k
+  "Return top `k` from prob-maps with :prob key"
+  [k prob-maps]
+  (->> prob-maps
+       (sort-by :prob)
+       reverse
+       (take k)))
+
 (defn predict
   "Predict with `model` the top `k` labels from `labels` of the ndarray `x`"
   ([model labels x]
    (predict model labels x 5))
   ([model labels x k]
-   (let [prob
-         ;; The computation graph of the model is ran forward once
-         (-> model (m/forward {:data [x]}) m/outputs ffirst ndarray/->vec)
-
-         prob-with-labels
-         (mapv (fn [p l] {:prob p :label l}) prob labels)]
-     (->> prob-with-labels
-          (sort-by :prob)
-          reverse
-          (take k)))))
+   (let [probs (-> model
+                   (m/forward {:data [x]})
+                   m/outputs
+                   ffirst
+                   ndarray/->vec)
+         prob-maps (mapv (fn [p l] {:prob p :label l}) probs labels)]
+     (top-k k prob-maps))))
 
 (comment
   (->> "images/guitarplayer.jpg"
@@ -107,10 +113,9 @@
   (->> "images/dog.jpg"
        cv/imread
        preprocess-img-mat
-       (predict inception-mod image-net-labels))
+       (predict inception-mod image-net-labels)))
   ;({:prob 0.89285797, :label "n02110958 pug, pug-dog"}
   ;{:prob 0.06376573, :label "n04409515 tennis ball"}
   ;{:prob 0.01919549, :label "n03942813 ping-pong ball"}
   ;{:prob 0.014978847, :label "n02108422 bull mastiff"}
   ;{:prob 0.0012790044, :label "n02808304 bath towel"})
-  )

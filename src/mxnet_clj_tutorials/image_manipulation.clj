@@ -7,8 +7,8 @@
     [org.apache.clojure-mxnet.shape :as mx-shape]
 
     [opencv4.core :as cv]
-    [opencv4.utils :as cvu]
-    )
+    [opencv4.utils :as cvu])
+
   (:import org.opencv.core.Mat java.awt.image.DataBufferByte))
 
 (defn download!
@@ -42,9 +42,9 @@
       ;; Resize
       (cv/resize! (cv/new-size 400 400))
       ;; Maps pixel values from [-125, 125] to [0, 250]
-      (cv/convert-to! cv/CV_8SC3 0.5)
+      (cv/convert-to! cv/CV_8SC3 0.5)))
       ;; TODO: add cropping?
-      ))
+
 
 (defn mat->ndarray
   "Converts a `mat` from OpenCV to an MXNET `ndarray`"
@@ -104,14 +104,16 @@
       ;; Saving image to disk
       (javax.imageio.ImageIO/write "jpg" (java.io.File. "test2.jpg")))
 
-  (-> "images/img_517.jpg"
+  (-> "images/mnist_digit_8.jpg"
       (mx-img/read-image {:to-rgb true})
-      mx-img/to-image
+      ; mx-img/to-image
+      ; (javax.imageio.ImageIO/write "jpg" (java.io.File. "test.jpg"))
       ; cvu/buffered-image-to-mat
       ;; Save Image To File
-      (javax.imageio.ImageIO/write "jpg" (java.io.File. "test.jpg"))
+      ndarray->mat
+      (cv/imwrite "test-digit.jpg"))
       ; cvu/imshow
-      )
+
 
   ;; Showing an image using `cvu/buffered-image-to-mat`
   (-> "images/dog.jpg"
@@ -124,5 +126,4 @@
   (-> "images/dog.jpg"
       (mx-img/read-image {:to-rgb false})
       ndarray->mat
-      cvu/imshow)
-  )
+      cvu/imshow))

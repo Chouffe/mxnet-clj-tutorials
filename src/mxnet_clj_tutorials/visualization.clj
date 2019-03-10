@@ -1,17 +1,10 @@
 (ns mxnet-clj-tutorials.visualization
-  "Functions and Utils to render pretrained and user defined models"
-  (:require [clojure.java.io :as io]
-            [clojure.string :as string]
+  "Functions and utils to render pretrained and user defined models."
+  (:require
+    [org.apache.clojure-mxnet.module :as m]
+    [org.apache.clojure-mxnet.visualization :as viz]
 
-            [org.apache.clojure-mxnet.dtype :as d]
-            [org.apache.clojure-mxnet.image :as image]
-            [org.apache.clojure-mxnet.module :as m]
-            [org.apache.clojure-mxnet.ndarray :as ndarray]
-            [org.apache.clojure-mxnet.shape :as mx-shape]
-            [org.apache.clojure-mxnet.symbol :as sym]
-            [org.apache.clojure-mxnet.visualization :as viz]
-
-            [mxnet-clj-tutorials.lenet :as lenet]))
+    [mxnet-clj-tutorials.lenet :as lenet]))
 
 ;; Run the `download_vgg16.sh` and `download_resnet18.sh`
 ;; prior to running the following code
