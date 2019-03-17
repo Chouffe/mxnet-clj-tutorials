@@ -42,8 +42,11 @@
       (cv/add! (cv/new-scalar 103.939 116.779 123.68))
       ;; Resize
       (cv/resize! (cv/new-size 400 400))
-      ;; Maps pixel values from [-125, 125] to [0, 250]
-      (cv/convert-to! cv/CV_8SC3 0.5)))
+      ;; Maps pixel values from [-128, 128] to [0, 127]
+      (cv/convert-to! cv/CV_8SC3 0.5)
+      ;; Normalize pixel values into (0.0, 1.0)
+      ; (cv/normalize! 0.0 1.0 cv/NORM_MINMAX cv/CV_32FC1)
+      ))
 
 (defn mat->ndarray
   "Convert a `mat` from OpenCV to an MXNet `ndarray`"
@@ -97,10 +100,27 @@
     (doseq [{:keys [label top-left bottom-right] :as result} results]
       (draw-bounding-box! img result)))
 
+  (defn mat->color-mat
+    "Returns Mat of the selected channel.
+     Assumes the Mat is in RGB format.
+
+    `mat`: Mat object from OpenCV
+    `color`: value in #{:red :green :blue}
+
+    Ex
+      (mat->color-mat m :green)
+      (mat->color-mat m :blue)"
+    [mat color]
+    (let [color->selector #(get {:red first :green second :blue last} % first)]
+      ((color->selector color) (cv/split! mat))))
+
 (comment
 
   ;; Download a cat image from a `uri` and save it into `images/cat.jpg`
   (download! "https://raw.githubusercontent.com/dmlc/web-data/master/mxnet/doc/tutorials/python/predict_image/cat.jpg" "images/cat.jpg")
+
+  ;; Download a dog image from a `uri` and save it into `images/dog.jpg`
+  (download! "https://github.com/dmlc/web-data/blob/master/mxnet/doc/tutorials/python/predict_image/dog.jpg?raw=true" "images/dog.jpg")
 
   ;; Preview an image from disk
   (preview! "images/cat.jpg")
@@ -110,11 +130,10 @@
 
   ;; Visualize preprocessing steps
   (-> "images/cat.jpg"
-      cv/imread
-      preprocess-mat
-      cvu/imshow))
+      (cv/imread)
+      (preprocess-mat)
+      (cvu/imshow))
 
-(comment
   ;; Writing image to disk
   (-> "images/dog.jpg"
       ;; Convert filename to NDArray
@@ -122,7 +141,7 @@
       ;; Resizing image to height = 400, width = 400
       (mx-img/resize-image 400 400)
       ;; Convert to BufferedImage
-      mx-img/to-image
+      (mx-img/to-image)
       ;; Saving BufferedImage to disk
       (javax.imageio.ImageIO/write "jpg" (java.io.File. "test2.jpg")))
 
@@ -131,51 +150,91 @@
       ;; Load image from disk
       (mx-img/read-image {:to-rgb true})
       ;; Convert NDArray to Mat
-      ndarray->mat
+      (ndarray->mat)
       ;; Save Image to disk
       (cv/imwrite "test-digit.jpg"))
-      ; cvu/imshow
+  ; cvu/imshow
 
   ;; Showing an image using `buffered-image-to-mat`
   (-> "images/dog.jpg"
       ;; Read image from disk
       (mx-img/read-image {:to-rgb true})
       ;; Convert to BufferedImage - Can be very slow...
-      mx-img/to-image
+      (mx-img/to-image)
       ;; Convert to Mat
-      cvu/buffered-image-to-mat
+      (cvu/buffered-image-to-mat)
       ;; Show Mat
-      cvu/imshow)
+      (cvu/imshow))
 
   ;; Showing an image using `ndarray->mat`
   (-> "images/dog.jpg"
       ;; Read image from disk
       (mx-img/read-image {:to-rgb false})
       ;; Convert NDArray to Mat
-      ndarray->mat
+      (ndarray->mat)
       ;; Show Mat
-      cvu/imshow)
+      (cvu/imshow))
 
   ;; Showing an image using `mx-cv/ndarray-to-mat` from `origami`
+  ;; MXNet default channel ordering is: RGB
+  ;; OpenCV default channel ordering is: BGR
   (-> "images/dog.jpg"
       ;; Read image from disk
       (mx-img/read-image {:to-rgb false})
       ;; Convert NDArray to Mat
-      mx-cv/ndarray-to-mat
+      (mx-cv/ndarray-to-mat)
       ;; Show Mat
-      cvu/imshow)
+      (cvu/imshow))
 
-  ;; Drawing one bounding box on an image of dog
-  (let [img (cv/imread "images/dog.jpg")]
-    (draw-bounding-box! img {:top-left [200 440]
-                             :bottom-right [350 525]
-                             :label "cookie"})
-    (cvu/imshow img))
+  ;; Looking at the raw bytes: -128 to 127
+  (-> "images/dog.jpg"
+      ;; Read image from disk
+      (mx-img/read-image {:to-rgb false})
+      ;; Resizing image
+      (mx-img/resize-image 200 200)
+      ;; Convert NDArray to Mat
+      (mx-cv/ndarray-to-mat)
+      ;; Mat to bytes
+      (cv/<<)
+      (cv/->bytes)
+      (vec))
 
-  ;; Drawing multiple bounding boxes on an image of dog
-  (let [img (cv/imread "images/dog.jpg")
-        results [{:top-left [200 70] :bottom-right [830 430] :label "dog"}
-                 {:top-left [200 440] :bottom-right [350 525] :label "cookie"}]]
-    (draw-predictions! img results)
-    (cvu/imshow img))
-  )
+  ;; Display green channel of a picture
+  (-> "images/cat.jpg"
+      ;; Read image from disk
+      (mx-img/read-image {:to-rgb true})
+      ;; Convert NDArray to Mat
+      (mx-cv/ndarray-to-mat)
+      ;; Extract the red color channel
+      (mat->color-mat :green)
+      ;; Display the image
+      (cvu/imshow))
+
+  ;; Display all channels (blue, green and red) of a picture
+  (-> "images/cat.jpg"
+      ;; Read image from disk
+      (mx-img/read-image {:to-rgb true})
+      ;; Resize
+      (mx-img/resize-image 200 200)
+      ;; Convert NDArray to Mat
+      (mx-cv/ndarray-to-mat)
+      ;; Extract the different color channels
+      ((juxt #(mat->color-mat % :blue)
+             #(mat->color-mat % :green)
+             #(mat->color-mat % :red)))
+      ;; Display the images
+      (#(map cvu/imshow %)))
+
+;; Drawing one bounding box on an image of dog
+(let [img (cv/imread "images/dog.jpg")]
+  (draw-bounding-box! img {:top-left [200 440]
+                           :bottom-right [350 525]
+                           :label "cookie"})
+  (cvu/imshow img))
+
+;; Drawing multiple bounding boxes on an image of dog
+(let [img (cv/imread "images/dog.jpg")
+      results [{:top-left [200 70] :bottom-right [830 430] :label "dog"}
+               {:top-left [200 440] :bottom-right [350 525] :label "cookie"}]]
+  (draw-predictions! img results)
+  (cvu/imshow img))
