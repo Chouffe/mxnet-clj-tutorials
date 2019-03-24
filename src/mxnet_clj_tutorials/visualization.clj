@@ -22,6 +22,14 @@
   "Resnet18 Module"
   (m/load-checkpoint {:prefix (str model-dir "/resnet-18") :epoch 0}))
 
+(def resnet152-mod
+  "Resnet152 Module"
+  (m/load-checkpoint {:prefix (str model-dir "/resnet-152") :epoch 0}))
+
+(def inception-mod
+  "Inception Module"
+  (m/load-checkpoint {:prefix (str model-dir "/Inception-BN") :epoch 0}))
+
 (defn render-model!
   "Render the `model-sym` and saves it as a pdf file in `path/model-name.pdf`"
   [{:keys [model-name model-sym input-data-shape path]}]
@@ -44,6 +52,18 @@
   ;; Rendering pretrained Resnet18
   (render-model! {:model-name "resnet18"
                   :model-sym (m/symbol resnet18-mod)
+                  :input-data-shape [1 3 244 244]
+                  :path model-render-dir})
+
+  ;; Rendering pretrained Resnet152
+  (render-model! {:model-name "resnet152"
+                  :model-sym (m/symbol resnet152-mod)
+                  :input-data-shape [1 3 244 244]
+                  :path model-render-dir})
+
+  ;; Rendering pretrained Inception
+  (render-model! {:model-name "inception"
+                  :model-sym (m/symbol inception-mod)
                   :input-data-shape [1 3 244 244]
                   :path model-render-dir})
 
