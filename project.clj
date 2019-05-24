@@ -8,6 +8,7 @@
 
                  ;; OpenCV wrapper
                  [origami "4.0.0-7"]]
+  :plugins [[lein-jupyter "0.1.16"]]
 
   :repositories
   [["vendredi" {:url "https://repository.hellonico.info/repository/hellonico/"}]
