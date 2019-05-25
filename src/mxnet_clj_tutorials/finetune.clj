@@ -122,7 +122,31 @@
 
   ;; On CPU: will be very slow
   (fine-tune! (get-model! "resnet-18") 1 [(context/cpu)])
-  ;; On GPU: fast!!
+  ; 64% training accuracy in about 30min of training
+  ; 87% validation accuracy
+  ; Can feed on average 2.5 images per second to the model for training
+
+  ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[0] Batch [540]       Speed: 2.43 samples/secTrain-accuracy=0.626063
+  ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[0] Batch [550]       Speed: 2.33 samples/secTrain-accuracy=0.629401
+  ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[0] Batch [560]       Speed: 2.09 samples/secTrain-accuracy=0.632799
+  ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[0] Batch [570]       Speed: 2.37 samples/secTrain-accuracy=0.635201
+  ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[0] Batch [580]       Speed: 2.20 samples/secTrain-accuracy=0.638210
+  ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[0] Batch [590]       Speed: 2.39 samples/secTrain-accuracy=0.641117
+  ; INFO  org.apache.mxnet.module.BaseModule: Epoch[0] Train-accuracy=0.64111674
+  ; INFO  org.apache.mxnet.module.BaseModule: Epoch[0] Time cost=2248485
+  ; INFO  org.apache.mxnet.module.BaseModule: Epoch[0] Validation-accuracy=0.87297297
+
   (fine-tune! (get-model! "resnet-18") 6 [(context/gpu)])
+  ; 91% training accuracy in less than 2min of training
+  ; 91% validation accuracy
+  ; Can feed on average 170 images per second to the model for training
+
+  ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[5] Batch [60]        Speed: 169.31 samples/sec       Train-accuracy=0.920338
+  ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[5] Batch [70]        Speed: 168.73 samples/sec       Train-accuracy=0.919454
+  ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[5] Batch [80]        Speed: 169.76 samples/sec       Train-accuracy=0.919560
+  ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[5] Batch [90]        Speed: 170.03 samples/sec       Train-accuracy=0.918441
+  ; INFO  org.apache.mxnet.module.BaseModule: Epoch[5] Train-accuracy=0.91796875
+  ; INFO  org.apache.mxnet.module.BaseModule: Epoch[5] Time cost=34549
+  ; INFO  org.apache.mxnet.module.BaseModule: Epoch[5] Validation-accuracy=0.91032606
 
   )
