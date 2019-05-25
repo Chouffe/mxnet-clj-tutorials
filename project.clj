@@ -5,6 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.apache.mxnet.contrib.clojure/clojure-mxnet-linux-cpu "1.4.0"]
+                 ; [org.apache.mxnet.contrib.clojure/clojure-mxnet-linux-gpu "1.4.0"]
 
                  ;; OpenCV wrapper
                  [origami "4.0.0-7"]]
