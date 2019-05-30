@@ -95,7 +95,7 @@
       ;; Training the module
       (m/fit {:train-data train-iter
               :eval-data val-iter
-              :num-epoch 1
+              :num-epoch num-epoch
               :fit-params
               (m/fit-params
                 {:eval-metric (eval-metric/accuracy)
@@ -126,6 +126,7 @@
   ; 87% validation accuracy
   ; Can feed on average 2.5 images per second to the model for training
 
+  ; ...
   ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[0] Batch [540]       Speed: 2.43 samples/secTrain-accuracy=0.626063
   ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[0] Batch [550]       Speed: 2.33 samples/secTrain-accuracy=0.629401
   ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[0] Batch [560]       Speed: 2.09 samples/secTrain-accuracy=0.632799
@@ -148,5 +149,21 @@
   ; INFO  org.apache.mxnet.module.BaseModule: Epoch[5] Train-accuracy=0.91796875
   ; INFO  org.apache.mxnet.module.BaseModule: Epoch[5] Time cost=34549
   ; INFO  org.apache.mxnet.module.BaseModule: Epoch[5] Validation-accuracy=0.91032606
+
+  (fine-tune! (get-model! "resnet-50") 5 [(context/gpu)])
+  ; On a bigger model: Resnet50
+  ; 98.1% training accuracy in less than 5min of training
+  ; 94.4% validation accuracy
+  ; SOTA 2018!!
+  ; Can feed on average 49 images per second to the model for training
+
+  ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[0] Batch [10]        Speed: 48.33 samples/sec       Train-accuracy=0.071023
+  ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[0] Batch [20]        Speed: 48.57 samples/sec       Train-accuracy=0.132440
+  ; ...
+  ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[5] Batch [170]       Speed: 48.66 samples/sec       Train-accuracy=0.981542
+  ; INFO  org.apache.mxnet.Callback$Speedometer: Epoch[5] Batch [180]       Speed: 47.69 samples/sec       Train-accuracy=0.981354
+  ; INFO  org.apache.mxnet.module.BaseModule: Epoch[5] Train-accuracy=0.9814189
+  ; INFO  org.apache.mxnet.module.BaseModule: Epoch[5] Time cost=119747
+  ; INFO  org.apache.mxnet.module.BaseModule: Epoch[5] Validation-accuracy=0.9436141
 
   )
