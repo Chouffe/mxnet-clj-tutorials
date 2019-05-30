@@ -70,11 +70,11 @@
 (ndarray/shape-vec X-train) ;[800 100]
 (take 10 (ndarray/->vec X-train)) ;(0.36371076 0.32504722 0.57019675 0.038425427 0.43860152 0.63427407 0.9883738 0.95894927 0.102044806 0.6527903)
 (ndarray/shape-vec X-valid) ;[200 100]
-(take 10 (ndarray/->vec X-valid)) ;(0.36371076 0.32504722 0.57019675 0.038425427 0.43860152 0.63427407 0.9883738 0.95894927 0.102044806 0.6527903)
+(take 10 (ndarray/->vec X-valid)) ;(0.39140648 0.85629326 0.17789091 0.6476683 0.11563718 0.3868664 0.6273503 0.017593056 0.11406484 0.62723494)
 (ndarray/shape-vec Y-train) ;[800]
 (take 10 (ndarray/->vec Y-train)) ;(9.0 1.0 8.0 8.0 6.0 3.0 1.0 2.0 4.0 9.0)
 (ndarray/shape-vec Y-valid) ;[200]
-(take 10 (ndarray/->vec Y-valid)) ;(9.0 1.0 8.0 8.0 6.0 3.0 1.0 2.0 4.0 9.0)
+(take 10 (ndarray/->vec Y-valid)) ;(4.0 3.0 7.0 8.0 2.0 2.0 7.0 3.0 9.0 2.0)
 
 ;;; Building the Network as a symbolic graph of computations
 
