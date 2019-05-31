@@ -5,7 +5,7 @@ set -evx
 
 PROJECT_ROOT=$(cd "$(dirname $0)/../.."; pwd)
 
-data_path=$PROJECT_ROOT/data/
+data_path=$PROJECT_ROOT/data/oxford-pet/
 
 if [ ! -d "$data_path" ]; then
     mkdir -p "$data_path"
