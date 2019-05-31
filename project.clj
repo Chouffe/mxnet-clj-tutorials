@@ -4,11 +4,12 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.10.0"]
-                 [org.apache.mxnet.contrib.clojure/clojure-mxnet-linux-cpu "1.4.1"]
+                 [org.apache.mxnet.contrib.clojure/clojure-mxnet "1.5.0-SNAPSHOT"]
                  ; [org.apache.mxnet.contrib.clojure/clojure-mxnet-linux-gpu "1.4.1"]
 
                  ;; OpenCV wrapper
                  [origami "4.0.0-7"]]
+  ;; Jupyter Notebook plugin
   :plugins [[lein-jupyter "0.1.16"]]
 
   :repositories
