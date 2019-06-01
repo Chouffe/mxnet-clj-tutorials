@@ -9,6 +9,7 @@ pom.xml.asc
 /.nrepl-port
 .hgignore
 .hg/
-model/
+model/*
+!model/oxford-pet/synset.txt
 images/
 data/
