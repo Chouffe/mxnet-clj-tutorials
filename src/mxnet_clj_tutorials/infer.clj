@@ -1,5 +1,6 @@
 (ns mxnet-clj-tutorials.infer
-  (:require [clojure.string :as str]
+  (:require [clojure.java.io :as io]
+            [clojure.string :as str]
 
             [org.apache.clojure-mxnet.callback :as callback]
             [org.apache.clojure-mxnet.context :as context]
@@ -16,7 +17,9 @@
 
             [opencv4.mxnet :as mx-cv]
             [opencv4.core :as cv]
-            [opencv4.utils :as cvu]))
+            [opencv4.utils :as cvu])
+  (:import (javax.imageio ImageIO)
+           (java.io File)))
 
 ;;; Pre-trained Image Classifier
 
@@ -86,14 +89,43 @@
     detector-factory
     {:contexts [(context/default-context)]}))
 
+(defn process-result!
+  "Plots `predictions` onto `image-path` and stores it in `output-dir`."
+  [output-dir image-path predictions]
+  (println "looking at image" image-path)
+  (println "predictions: " predictions)
+  (let [buf (ImageIO/read (new File image-path))
+        width (.getWidth buf)
+        height (.getHeight buf)
+        names (mapv :class predictions)
+        coords (mapv (fn [prediction]
+                       (-> prediction
+                           (update :x-min #(* width %))
+                           (update :x-max #(* width %))
+                           (update :y-min #(* height %))
+                           (update :y-max #(* height %))))
+                     predictions)
+        new-img (-> (ImageIO/read (new File image-path))
+                    (mx-img/draw-bounding-box!
+                      coords
+                      {:stroke 3
+                       :names (mapv #(str (:class %) "-" (:prob %)) predictions)
+                       :transparency 0.9
+                       :font-size-mult 1.0}))]
+    (->> (str/split image-path #"\/")
+         last
+         (io/file output-dir)
+         (ImageIO/write new-img "jpg"))))
+
 (comment
 
   ;;; Classification
 
-  ;; With custom fine tuned model
+  ;; With custom fine-tuned model
 
   (def image-pug
     (infer/load-image-from-file "data/oxford-pet/pug/pug_1.jpg"))
+
   (def image-shiba-inu
     (infer/load-image-from-file "data/oxford-pet/shiba_inu/shiba_inu_1.jpg"))
 
@@ -194,19 +226,25 @@
 
   ;;; Detector
 
-  (def image-dog
-    (infer/load-image-from-file "data/resnet50_ssd/dog.jpg"))
+  (def image-path-dog "data/resnet50_ssd/dog.jpg")
+  (def image-dog (infer/load-image-from-file image-path-dog ))
 
   (cvu/show (cvu/buffered-image-to-mat image-dog))
 
   (def bounding-boxes
-    (first (infer/detect-objects detector image-dog 5)))
+    (->> (infer/detect-objects detector image-dog 5)
+         (first)
+         (filter (comp (partial < 0.8) :prob))))
  ; [{:class "car", :prob 0.99847263, :x-min 0.60979164, :y-min 0.14068183, :x-max 0.89065313, :y-max 0.29426125}
  ; {:class "bicycle", :prob 0.904738, :x-min 0.30460563, :y-min 0.2928976, :x-max 0.7496816, :y-max 0.8182522}
- ; {:class "dog", :prob 0.8226828, :x-min 0.16371784, :y-min 0.34988278, :x-max 0.40358952, :y-max 0.9312255}
- ; {:class "bicycle", :prob 0.21815668, :x-min 0.1817387, :y-min 0.26932585, :x-max 0.46060142, :y-max 0.8074726}
- ; {:class "person", :prob 0.12772352, :x-min 0.17368972, :y-min 0.2365945, :x-max 0.31111816, :y-max 0.37116468}]
+ ; {:class "dog", :prob 0.8226828, :x-min 0.16371784, :y-min 0.34988278, :x-max 0.40358952, :y-max 0.9312255}]
 
- ;; TODO: process result and draw bounding boxes
+  ;; Open the file "output/pug_cookie.jpeg" and look at the bounding boxes
+  (->> (infer/detect-objects detector image-dog 3)
+       ;; Only one image is passed in so we take the first predictions
+       (first)
+       ;; Filter above 80% probability for the predictions
+       (filter (comp (partial < 0.8) :prob))
+       (process-result! "output/" image-path-dog))
 
   )
