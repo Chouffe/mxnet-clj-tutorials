@@ -13,3 +13,4 @@ model/*
 !model/oxford-pet/synset.txt
 images/
 data/
+output/
